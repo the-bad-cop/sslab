@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-
-<body>
-    <pre>
         #include <stdio.h>
             void main()
             {
-                int p,r,i,j,k,count=0,done[20],x,l;
+                int p,r,i,j,k,count=0,x,l;
                 int avail[20],alloc[20][20],max[20][20],need[20][20];
                 printf("Enter no. of process:");
                 scanf("%d",&p);
@@ -101,7 +89,4 @@
                 }
                 printf("\nSystem is in safe state");
             }
-    </pre>
-</body>
-
-</html>
+    
