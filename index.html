@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <pre>
+    #include <stdio.h>
+        void main()
+        {
+            int p,r,i,j,k,count=0,done[]={0,0,0,0,0},x,l;
+            printf("Enter no. of process:");
+            scanf("%d",&p);
+            printf("Enter no. of resource:");
+            scanf("%d",&r);
+           int alloc[5][3] = { { 0, 1, 0 }, // P0    // Allocation Matrix 
+                                { 2, 0, 0 }, // P1 
+                                { 3, 0, 2 }, // P2 
+                                { 2, 1, 1 }, // P3 
+                                { 0, 0, 2 } }; // P4 
+          
+            int max[5][3] = { { 7, 5, 3 }, // P0    // MAX Matrix 
+                              { 3, 2, 2 }, // P1 
+                              { 9, 0, 2 }, // P2 
+                              { 2, 2, 2 }, // P3 
+                              { 4, 3, 3 } }; // P4 
+          
+            int avail[3] = { 3, 3, 2 };
+            printf("\nMaking need matrix\n");
+            int need[10][10];
+            for ( i = 0; i < p; i++)
+            {
+                for ( j = 0; j < r; j++)
+                {
+                    need[i][j]=max[i][j]-alloc[i][j];
+                }
+                
+            }
+            printf("\nNeed matrix made\n");
+            int check(int a)
+            {
+                int c_flag;
+                for ( l = 0; l < r; l++)
+                {
+                    if(need[a][l]<=avail[l])
+                        c_flag=1;
+                    else
+                    {
+                        c_flag=0;break;
+                    }
+                    
+                }
+                return c_flag;
+            }
+            void new_avail(int a)
+            {
+                int u;
+                for ( u = 0; u < r; u++)
+                {
+                    avail[u]+=alloc[a][u];
+                }
+                
+            }
+            while(count!=p)
+            {
+                for ( i = 0; i < p; i++)
+                {
+                    if(done[i]!=1)
+                    {
+                        x=check(i);
+                        if (x==1)
+                        {
+                            printf("Process%d is executing\n",i+1);
+                            new_avail(i);//new avail creation
+                            count++;
+                            done[i]=1;
+                        }
+                    }
+                
+                }
+            }
+        } 
+    </pre>
+</body>
+
+</html>
