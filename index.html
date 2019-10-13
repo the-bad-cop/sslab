@@ -2,85 +2,91 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
 </head>
 
 <body>
-    <pre>
+	<pre>
 /*
 
 prod-con_prob
 
-#include< stdio.h>
-#include< stdlib.h>
- 
-int mutex=1,full=0,empty=3,x=0;
- 
-int main()
-{
-	int n;
-	void producer();
-	void consumer();
-	int wait(int);
-	int signal(int);
-	printf("\n1.Producer\n2.Consumer\n3.Exit");
-	while(1)
+#include <stdio.h>
+	#include <stdlib.h>
+	int mutex = 1, buffer, empty, full = 0, choice;
+	void main()
 	{
-		printf("\nEnter your choice:");
-		scanf("%d",&n);
-		switch(n)
+		int wait(int);
+		int signal(int);
+		void producer();
+		void consumer();
+		printf("Enter the buffer size:");
+		scanf("%d", &buffer);
+		empty = buffer;
+		while (1)
 		{
-			case 1:	if((mutex==1)&&(empty!=0))
-						producer();
-					else
-						printf("Buffer is full!!");
-					break;
-			case 2:	if((mutex==1)&&(full!=0))
-						consumer();
-					else
-						printf("Buffer is empty!!");
-					break;
+			printf("Enter your choice:: 1:Producer 2:Consumer 3:Exit\n");
+			scanf("%d", &choice);
+			switch (choice)
+			{
+			case 1:
+				//producer
+				if ((mutex == 1) && (empty != 0))
+				{
+					producer();
+				}
+				else
+				{
+					printf("Buffer full!\n");
+				}
+	
+				break;
+			case 2:
+				//consumer
+				if ((mutex == 1) && (full != 0))
+				{
+					consumer();
+				}
+				else
+				{
+					printf("Buffer empty!\n");
+				}
+				break;
 			case 3:
-					exit(0);
-					break;
+				exit(0);
+				break;
+				// default:
+				// break;
+			}
 		}
 	}
-	
-	return 0;
-}
- 
-int wait(int s)
-{
-	return (--s);
-}
- 
-int signal(int s)
-{
-	return(++s);
-}
- 
-void producer()
-{
-	mutex=wait(mutex);
-	full=signal(full);
-	empty=wait(empty);
-	x++;
-	printf("\nProducer produces the item %d",x);
-	mutex=signal(mutex);
-}
- 
-void consumer()
-{
-	mutex=wait(mutex);
-	full=wait(full);
-	empty=signal(empty);
-	printf("\nConsumer consumes item %d",x);
-	x--;
-	mutex=signal(mutex);
-}
+	int wait(int s)
+	{
+		return --s;
+	}
+	int signal(int s)
+	{
+		return ++s;
+	}
+	void producer()
+	{
+		mutex = wait(mutex);
+		full = signal(full);
+		empty = wait(empty);
+		printf("Produced\n");
+		mutex = signal(mutex);
+	}
+	void consumer()
+	{
+		mutex = wait(mutex);
+		full = wait(full);
+		empty = signal(empty);
+		printf("Consumed\n");
+		mutex = signal(mutex);
+	}
 */
     </pre>
 </body>
