@@ -11,81 +11,181 @@
 <body>
 	<pre>
 /*
+single level
 
-prod-con_prob
-
-#include <stdio.h>
-	#include <stdlib.h>
-	int mutex = 1, buffer, empty, full = 0, choice;
+#include< stdio.h>
+	struct
+	{
+	char dname[10],fname[10][10];
+	int fcnt;
+	}dir;
 	void main()
 	{
-		int wait(int);
-		int signal(int);
-		void producer();
-		void consumer();
-		printf("Enter the buffer size:");
-		scanf("%d", &buffer);
-		empty = buffer;
-		while (1)
-		{
-			printf("Enter your choice:: 1:Producer 2:Consumer 3:Exit\n");
-			scanf("%d", &choice);
-			switch (choice)
-			{
-			case 1:
-				//producer
-				if ((mutex == 1) && (empty != 0))
-				{
-					producer();
-				}
-				else
-				{
-					printf("Buffer full!\n");
-				}
+	int i,ch;
+	char f[30];
+	clrscr();
+	dir.fcnt = 0;
+	printf("\nEnter name of directory -- ");
+	scanf("%s", dir.dname);
+	while(1)
+	{
+	printf("\n\n 1. Create File\t2. Delete File\t3. Search File \n 4. Display Files\t5. Exit\nEnter your choice -- ");
+	scanf("%d",&ch);
+	switch(ch)
+	{
+	case 1: printf("\n Enter the name of the file -- ");
+	scanf("%s",dir.fname[dir.fcnt]);
+	dir.fcnt++;
+	break;
+	case 2: printf("\n Enter the name of the file -- ");
+	scanf("%s",f);
+	for(i=0;i< dir.fcnt;i++)
+	{
+	if(strcmp(f, dir.fname[i])==0)
+	{
+	printf("File %s is deleted ",f);
+	strcpy(dir.fname[i],dir.fname[dir.fcnt-1]);
+	break;
+	}
+	}
+	if(i==dir.fcnt)
+	printf("File %s not found",f);
+	else
+	dir.fcnt--;
+	break;
+	case 3: printf("\n Enter the name of the file -- ");
+	scanf("%s",f);
+	for(i=0;i< dir.fcnt;i++)
+	{
+	if(strcmp(f, dir.fname[i])==0)
+	{
+	printf("File %s is found ", f);
+	break;
+	}
+	}
+	if(i==dir.fcnt)
+	printf("File %s not found",f);
+	break;
+	case 4: if(dir.fcnt==0)
+	printf("\n Directory Empty");
+	else
+	{
+	printf("\n The Files are -- ");
+	for(i=0;i < dir.fcnt;i++)
+	printf("\t%s",dir.fname[i]);
+	}
+	break;
+	default: exit(0);
+	}
+	}
+	getch();
+	}
+
+
+multilevel
+#include< stdio.h>
+	struct
+	{
+	char dname[10],fname[10][10];
+	int fcnt;
+	}dir[10];
+	void main()
+	{
+	int i,ch,dcnt,k;
+	char f[30], d[30];
+	clrscr();
+	dcnt=0;
+	while(1)
+	{
+	printf("\n\n 1. Create Directory\t 2. Create File\t 3. Delete File");
+	printf("\n 4. Search File \t \t 5. Display \t 6. Exit \t Enter your choice -- ");
+	scanf("%d",&ch);
+	switch(ch)
+	{
+	case 1: printf("\n Enter name of directory -- ");
+	scanf("%s", dir[dcnt].dname);
+	dir[dcnt].fcnt=0;
+	dcnt++;
+	printf("Directory created");
+	break;
+	case 2: printf("\n Enter name of the directory -- ");
+	scanf("%s",d);
+	for(i=0;i< dcnt;i++)
+	if(strcmp(d,dir[i].dname)==0)
+	{
+	printf("Enter name of the file -- ");
+	scanf("%s",dir[i].fname[dir[i].fcnt]);
+	dir[i].fcnt++;
+	printf("File created");
+	break;
+	}
+	if(i==dcnt)
+	printf("Directory %s not found",d);
+	break;
+	case 3: printf("\nEnter name of the directory -- ");
+	scanf("%s",d);
+	for(i=0;i< dcnt;i++)
+	{
+	if(strcmp(d,dir[i].dname)==0)
+	{
+	printf("Enter name of the file -- ");
+	scanf("%s",f);
+	for(k=0;k< dir[i].fcnt;k++)
+	{
+	if(strcmp(f, dir[i].fname[k])==0)
+	{
+	printf("File %s is deleted ",f);
+	dir[i].fcnt--;
+	strcpy(dir[i].fname[k],dir[i].fname[dir[i].fcnt]);
+	goto jmp;
+	}
+	}
+	printf("File %s not found",f);
+	goto jmp;
+	}
+	}
+	printf("Directory %s not found",d);
+	jmp : break;
+	case 4: printf("\nEnter name of the directory -- ");
+	scanf("%s",d);
+	for(i=0;i< dcnt;i++)
+	{
 	
-				break;
-			case 2:
-				//consumer
-				if ((mutex == 1) && (full != 0))
-				{
-					consumer();
-				}
-				else
-				{
-					printf("Buffer empty!\n");
-				}
-				break;
-			case 3:
-				exit(0);
-				break;
-				// default:
-				// break;
-			}
-		}
-	}
-	int wait(int s)
+	if(strcmp(d,dir[i].dname)==0)
 	{
-		return --s;
-	}
-	int signal(int s)
+	printf("Enter the name of the file -- ");
+	scanf("%s",f);
+	for(k=0;k< dir[i].fcnt;k++)
 	{
-		return ++s;
-	}
-	void producer()
+	if(strcmp(f, dir[i].fname[k])==0)
 	{
-		mutex = wait(mutex);
-		full = signal(full);
-		empty = wait(empty);
-		printf("Produced\n");
-		mutex = signal(mutex);
+	printf("File %s is found ",f);
+	goto jmp1;
 	}
-	void consumer()
+	}
+	printf("File %s not found",f);
+	goto jmp1;
+	}
+	}
+	printf("Directory %s not found",d);
+	jmp1: break;
+	case 5: if(dcnt==0)
+	printf("\nNo Directory's ");
+	else
 	{
-		mutex = wait(mutex);
-		full = wait(full);
-		empty = signal(empty);
-		printf("Consumed\n");
-		mutex = signal(mutex);
+	printf("\nDirectory\tFiles");
+	for(i=0;i< dcnt;i++)
+	{
+	printf("\n%s\t\t",dir[i].dname);
+	for(k=0;k< dir[i].fcnt;k++)
+	printf("\t%s",dir[i].fname[k]);
+	}
+	}
+	break;
+	default:exit(0);
+	}
+	}
+	getch();
 	}
 */
     </pre>
